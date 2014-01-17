@@ -1,22 +1,26 @@
 MexScript
 =========
-原文：<http://wiki.xentax.com/index.php?title=MexScript>
+原文地址：<http://wiki.xentax.com/index.php?title=MexScript>
+
+译文地址：<https://github.com/wisaly/document/blob/master/MexScript.md>
+
+译者：[Kris](http://www.maqiming.com)
 
 ## 简介 ##
-BMS代表Binary MultiEx Scripts（二进制MultiEx脚本）。 这是[MultiEx Commander](http://wiki.xentax.com/index.php?title=MultiEx_Commander)（MexCom)用来“解开”一组常见的[GRAFs](http://wiki.xentax.com/index.php?title=GRAFs)（Game Resource Archive Formats，游戏资源文件格式）的脚本格式。 这种文件格式由一个文本文件组成，它包含一系列能够被解释器执行的指令。解释器使用这些指令在GRAF文件中搜索关键数据，例如构成文件的名字、偏移量和大小。然后就可以用MultiEx Commander从这些文件中提取和替换资源了。
+BMS代表Binary MultiEx Scripts（二进制MultiEx脚本）。 这是[MultiEx Commander](http://wiki.xentax.com/index.php?title=MultiEx_Commander)（MexCom)用来“解开”一组常见的[GRAFs](http://wiki.xentax.com/index.php?title=GRAFs)（Game Resource Archive Formats，游戏资源文件格式）的脚本格式。 这种脚本由一个文本文件组成，它包含一系列能够被解释器执行的指令。解释器使用这些指令在GRAF文件中搜索关键数据，例如构成文件的名字、偏移量和大小。然后就可以用MultiEx Commander从这些文件中提取和替换资源了。
 
-**这种脚本的强大之处在于使用简单、格式简洁。几行脚本就足以支持任何新的游戏资源文件，因此可以毫无疑虑的使用它编写大型插件或底层脚本。**
+**这种脚本的强大之处在于使用简单、格式简洁。任何新的游戏资源文件只要几行脚本就可以支持，所以你不必费心编写大型插件或者底层脚本的代码。**
 
-在MexCom中，用户可以运行他们自己编写的BMS来处理他们的文件。在[XeNTaX WIKI](http://wiki.xentax.com/)和[XeNTaX Forum](http://forum.xentax.com/)能够找到非常多的BMS，能够极大地帮助你理解脚本的工作原理。你也可以添加新的BMS到WIKI里，它里面包含一个能够被MexCom调用的数据库。看这里：<http://wiki.xentax.com/index.php/BMS_to_Wiki>。
+使用MexCom，用户可以运行他们自己编写的BMS来处理他们的文件。在[XeNTaX WIKI](http://wiki.xentax.com/)和[XeNTaX Forum](http://forum.xentax.com/)能够找到非常多的BMS，可以帮助你理解脚本的工作原理。你也可以添加新的BMS到WIKI里，那里有一个能够被MexCom调用的数据库。见：<http://wiki.xentax.com/index.php/BMS_to_Wiki>。
 
-MexScriptor是一个MexCom的配套工具，它可以编写BMS脚本、保存为能被MexCom读取BMS文件。这个编辑器能够在MexBinderPlus中找到，一个BMS打包工具能够把选择的一些BMS文件保存为一个MRF（MultiEx Resource File，MultiEx资源文件）。在当前版本，帮助对话框提供了可用语句的基本概览。
+MexScriptor是一个MexCom的配套工具，它可以编写BMS脚本、保存为能被MexCom读取BMS文件。这个编辑器能在MexBinderPlus中找到。BMS打包工具可以把一组BMS文件保存为一个MRF（MultiEx Resource File，MultiEx资源文件）。在当前版本，帮助对话框里提供了可用语句的基本概览。
 
 ### 基础 ###
 BMS脚本的每一行都是一条语句。语句又可以被划分为词法单元（token）。
 
-每行只能包含一条语句，但仍然需要以分号（;）结束。这有点多余，没错，但这样的意图是表达多行语句。事实上，也许未来某个更新之后就不再需要分号了。但现在，它必须与每行最后一个词法单元相距一个空格。
+每行只能包含一条语句，但仍然需要以分号（;）结束。这有点多余，没错，但这样是为了表达跨行语句。事实上，将来某个更新之后也许就不再需要分号了。但现在，每行的末尾必须是一个分号，而且分号之前有一个空格。
 
-别忘了，如果你从因特网上复制了一个BMS脚本，在分号后面常有多余的空格。保存之前必须先删掉空格，否则将会返回一个错误。
+如果你从因特网上复制了一个BMS脚本，在分号后面常有多余的空格。保存之前必须先删掉空格，否则将会返回一个错误。
 
 ### 注释 ###
 截止到4.3版本，允许添加单行注释，在行首添加一个井号（#），而单引号是被禁止的。例如：
@@ -32,13 +36,13 @@ BMS脚本的每一行都是一条语句。语句又可以被划分为词法单�
 ## 变量操作 ##
 BMS脚本可以声明变量，然后对变量进行基本算术运算或控制操作。
 
-只要第一次在Set、Get或SavePos语句中使用变量，就可以声明一个新变量。变量**必须**在其它语句使用它之前进行声明。
+只要在Set、Get或SavePos语句中第一次使用变量，就可以声明一个新变量。变量**必须**在别的语句使用它之前进行声明。
 
-Set语句可以用来把一个值赋给你选择的变量。这个值可以是一个数字、其它变量或一个文本串。例如，你可以用`Set MyVar Long 1024 ;`把1024这个值赋给一个长整形（32位）变量`MyVar`。另外，你可以用`Set MyVar Long MyVar2 ;`把`MyVar2`赋给`MyVar`。最后，你可以用`Set MyVar String MultiEx ;`，这样`MyVar`现在就成了一个值为'MultiEx'的字符串变量。
+Set语句可以用来把一个值赋给你选择的变量。这个值可以是一个数字、其它变量或一个文本串。例如，你可以用`Set MyVar Long 1024 ;`把1024这个值赋给一个长整形（32位）变量MyVar。另外，你可以用`Set MyVar Long MyVar2 ;`把MyVar2赋给MyVar。最后，你可以用`Set MyVar String MultiEx ;`，这样MyVar现在就成了一个值为'MultiEx'的字符串变量。
 
-Math语句可以用来做一些简单的算术计算。`Math MyVar += 2 ;`将使`MyVar`增加2。类似的，`Math MyVar /= MyVar2 ;`将使`MyVar`除以`MyVar2`。注意这个命令不仅使用目标变量的值，同时也将它的值变为计算的结果。
+Math语句可以用来做一些简单的算术计算。`Math MyVar += 2 ;`将使MyVar增加2。类似的，`Math MyVar /= MyVar2 ;`将使MyVar除以MyVar2。注意这个命令不仅使用目标变量的值，同时也将它的值变为计算的结果。
 
-最后，String语句能够做一些简单的字符串操作。准确的说，它将另一个字符串（或数值转换成字符串）添加到目标字符串中。例如，`String MyVar += MyVar2`将在`MyVar`字符串的末尾追加`MyVar2`中的字符串。注意`MyVar2`是一个数字值，它将被转换成一个字符串并追加到`MyVar`后。
+最后，String语句能够做一些简单的字符串操作。准确的说，它将另一个字符串（或数值转换成字符串）添加到目标字符串中。例如，`String MyVar += MyVar2`将在MyVar字符串的末尾追加MyVar2中的字符串。注意MyVar2是一个数字值，它将被转换成一个字符串并追加到MyVar后。
 
 ## 控制结构 ##
 BMS脚本按从上到下的顺序执行，除非碰到一个控制结构。这些控制结构包括Do..While、For..Next和经典的If..Then..Else。
@@ -163,9 +167,84 @@ ImpType用来告诉MultiEx一个格式支持资源替换，表示资源的大小
 
 ImpType可以是：
 
-Standard: 告诉MultiEx指定了ResourceOffset和ResourceSize参数，并且将会被记录。
-StandardTail: 告诉MultiEx资源信息不在开头，而是在末尾，并且因此
-SFileSize : 
-SFileOff :  
+- Standard: 告诉MultiEx指定了ResourceOffset和ResourceSize参数，并且将会被记录。
+- StandardTail: 告诉MultiEx资源信息不在开头，而是在末尾，因此后面不全是资源数据。并且告诉MultiEx指定了ResourceOffset和ResourceSize参数，并且将会被记录。
+- SFileSize : 告诉MultiEx只有ResourceSize的偏移量能够在Log语句中指定。
+- SFileOff : 告诉MultiEx只有ResourceOffset的偏移量能够在Log语句中指定。  
 
+### Log ###
+    Log name offset size offsetoffset resourcesizeoffset ;
+Log语句是发给解释引擎的一个信号，表示已经找到了一个特殊的资源，并且包含资源的名字、GRAF文件中的绝对偏移量、占用了GRAF文件中多少个连续的字节、在GRAF中到前述偏移量和大小的偏移量。
 
+name: 表示资源名字的字符串，如果不能判定资源名字，把它置为NULL（""）。
+- offset: 资源在GRAF中的绝对偏移量。
+- size: 资源在GRAF文件中从offset指向的位置开始占用的连续字节数。
+- offsettooffset: GRAF文件中指向资源的指针变量的偏移量。支持替换功能需要使用此参数（见 ImpType语句）。
+- sizeoffset: GRAF文件中表示资源大小的变量的偏移量。 支持替换功能需要使用此参数（见 ImpType语句）。
+
+### Math ###
+    Math var1 op var2 ;
+Math语句对一个变量执行算术操作。
+
+- var1: 要被修改的变量
+- op: 要执行的算术操作。可用的运算符包括：
+	- += : var2加var1，和存入var1。
+	- -= : var1减var2，差存入var1。
+	- *= : var1乘以var2，积存入var1。
+	- /= : var1除以var2，商存入var1。 
+- var2: 要和第一个变量计算的值。注意这可以是一个变量也可以是常量。
+
+### Next ###
+    Next VarName
+参考For语句。是For循环结束的标记，在每次循环体执行之后'VarName'变量就自增，直到'VarName'变量达到For语句中的限制。
+
+### Open ###
+    Open Folder/Specifier Filename/Extension File
+Open语句将会打开指定文件。在MultiEx3中目录需要分开指定。另外，可以使用目录的别名（标签）：
+
+- FileDir: 和处理过的文件同一个目录（例如文件0）。
+- FDDE: 和文件同一个目录，同一个文件名，但扩展名不同。 
+
+你也必须提供文件得到的句柄（例如0=主文件，而所有新打开文件的句柄都应该递增：1,2,3等）。
+
+例如：
+
+    Open FDDE FAT 1 ;
+这将打开一个和主文件同目录同名的文件，但扩展名是*.fat，句柄是1。
+
+    Open FileDir sector.h 1 ;
+这将打开一个和主文件同目录，名为sector.h的文件，句柄是1。
+
+### SavePos ###
+    SavePos VarName File
+获取文件的当前位置，将结果存入名为'VarName'的变量中。
+
+### Set ###
+    Set VarName Var/Number ;
+将指定数值或变量赋给'VarName'变量。
+
+例如:
+
+    Set A B ;
+    Set A 1024 ;
+第一句A被赋予B的值。第二句，A被赋予1024。
+
+### While ###
+    Do ;
+    {some chore}
+    While Varname Criterium VarName2 ;
+是Do..While循环结束的标识，检查循环终止的条件是否满足。它检查'VarName'的值与'VarName2'的值是否满足条件。见控制结构。
+
+### String ###
+    String VarName1 +=/-= VarName2
+String用来做简单的字符串操作。你可以使用+=或-=操作符对两个字符串进行“加”或“减”操作。 +=将会在末尾追加，-=将会在末尾截断。你也可以在var2上使用一个数值变量，数字会被转换成字符串再追加到第一个字符串后。
+
+### CleanExit ###
+    CleanExit
+这将结束所有运行的操作，解释器将释放内存并推出。
+This will abort all running operations, clean up and exit the interpreter 
+
+## Statements (MexScriptor's Help)  ##
+
+## 范例 ##
+别忘了，wiki上已经有了[很多的BMS脚本范例](http://wiki.xentax.com/index.php/Special:Search?search=BMS&fulltext=Search)，你也可以在[XeNTaX](http://forum.xentax.com/viewtopic.php?t=1086)论坛上找到一个巨大的列表。
